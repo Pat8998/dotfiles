@@ -64,7 +64,7 @@ end
 
 function Utility.notify_bat(bat)
     local capacity, status = Data.get_bat(bat)
-    local icon = "battery-level-" .. tostring(math.floor((capacity +5) /10 ) * 10) .. (status == "Charging" and "-charging" or "") .. "-symbolic.svg"
+    local icon = "battery-level-" .. tostring(math.floor((capacity +5) /10 ) * 10) .. (status == "charging" and "-charging" or "") .. "-symbolic.svg"
     local notif = string.format('notify-send -r 997 -t 700 -i %s " %s%%"',
     "/usr/share/icons/Adwaita/symbolic/status/" .. icon,
     capacity)
@@ -75,6 +75,10 @@ end
 function Utility.brightness_set_dt(dt)
       local sgn =  (math.abs(dt) == dt and "+" or "-" )
       os.execute("brightnessctl set " .. tostring(math.ceil(math.abs(dt))) .. "%" .. sgn)
+end
+function Utility.sound_set_dt(dt)
+      local sgn =  (math.abs(dt) == dt and "+" or "-" )
+      os.execute("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ " ..  tostring(math.ceil(math.abs(dt))) .."%" .. sgn)
 end
 
 

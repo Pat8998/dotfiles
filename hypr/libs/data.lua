@@ -29,10 +29,12 @@ function data.get_bat(bat)
     local file = io.popen("cat /sys/class/power_supply/" .. bat .. "/capacity 2>/dev/null") 
     local capacity = tonumber(file and file:read("*a") or "0")
     if file then file:close() end
-    file = io.popen("cat /sys/class/power_supply/" .. bat .. "/status 2>/dev/null")
-    local status = file and file:read("*a") or ""
+    file = io.popen("upower -b 2>/dev/null") --can I precise the battery?
+    local raw = file and file:read("*a") or ""
+    local status = raw:match("state: *%a+"):match(" %a+"):match("%a+")
+    local icon = raw:match("'%g+'"):match("[^']+")
     if file then file:close() end
-    return capacity, status
+    return capacity, status, icon
 end
 
 return data
